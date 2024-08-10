@@ -44,29 +44,11 @@ CREATE TABLE InvoicePositions
 )
 GO
 
-/*
-CREATE TRIGGER trgGenerateInvoiceNumber
-ON Invoices
-INSTEAD OF INSERT
-AS
-BEGIN
-    INSERT INTO Invoices (ClientNumber, CreatedDate, Number)
-    SELECT 
-        i.ClientNumber, 
-        i.CreatedDate,
-        ''--'fv-' + FORMAT(i.CreatedDate, 'yyyyMMdd') + '-' + CAST(i.Id AS VARCHAR)
-    FROM 
-        inserted i;
-END
-GO
-*/
-
 CREATE TRIGGER trgGenerateInvoiceNumber
 ON Invoices
 AFTER INSERT
 AS
 BEGIN
-    -- Aktualizacja numerów faktur
     UPDATE i
     SET Number = 'fv-' + FORMAT(i.CreatedDate, 'yyyyMMdd') + '-' + CAST(i.Id AS VARCHAR)
     FROM Invoices i
@@ -157,6 +139,6 @@ VALUES
     (1, 1, 2),  -- Faktura 1, Produkt 1 (lodówka), Ilość 2
     (1, 2, 3),  -- Faktura 1, Produkt 2 (czajnik), Ilość 3
     (2, 2, 1),  -- Faktura 2, Produkt 2 (czajnik), Ilość 1
-    (2, 4, 5),  -- Faktura 2, Produkt 4 (mysz), Ilość 5
-	(3, 4, 1)	-- Faktura 3, Produkt 4 (mysz), Ilość 1
+    (2, 4, 5),  -- Faktura 2, Produkt 4 (mysz), Ilość 5	
+    (3, 4, 1)	-- Faktura 3, Produkt 4 (mysz), Ilość 1
 
